@@ -20,6 +20,7 @@ func (api *API) LoadAPIRoutes(app *fiber.App) {
 	router := app.Group("/api")
 	router.Use(middleware.NewLogger())
 	router.Route("/auth", api.loadAuthRoutes)
+	router.Route("/video", api.loadVideoRoutes)
 }
 
 // loadAuthRoutes load all routes of auth
@@ -32,4 +33,16 @@ func (api *API) loadAuthRoutes(router fiber.Router) {
 	router.Post("/login", middleware.NewLimiter(), handler.Login)
 	router.Post("/register", handler.Register)
 	router.Post("/logout", handler.Logout)
+}
+
+// loadVideoRoutes - load all routes of video handler
+//
+// Params:
+//   - router fiber.Router
+//
+// Return:
+//   - void
+func (api *API) loadVideoRoutes(router fiber.Router) {
+	handler := controller.NewVideoController()
+	router.Post("/upload", handler.Upload)
 }
