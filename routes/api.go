@@ -27,7 +27,7 @@ func (api *API) loadAuthRoutes(router fiber.Router) {
 	authService := service.NewAuthService(authRepo)
 	handler := controller.NewAuthController(config.Validate, authService)
 
-	router.Post("/login", handler.Login)
+	router.Post("/login", middleware.NewLimiter(), handler.Login)
 	router.Post("/register", handler.Register)
 	router.Post("/logout", handler.Logout)
 }
