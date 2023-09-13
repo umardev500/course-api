@@ -72,6 +72,10 @@ func (a *Auth) Register(c *fiber.Ctx) error {
 	return ok(c, fiber.StatusOK, "register successfuly", nil)
 }
 
+// Logout is method to handle user logout
+//
+// Return:
+//   - error
 func (a *Auth) Logout(c *fiber.Ctx) error {
 	return nil
 }
