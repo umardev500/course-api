@@ -36,6 +36,9 @@ func (ar *AuthRepository) Login(creds model.LoginRequest) (*model.UserModel, err
 
 // Create - insert user register
 //
+// Params:
+//   - payload model.UserModel
+//
 // Return:
 //   - error
 func (ar *AuthRepository) Create(payload model.UserModel) error {

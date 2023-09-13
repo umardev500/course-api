@@ -67,7 +67,7 @@ func (as *AuthService) Login(creds model.LoginRequest) (*string, error) {
 // Register create new user
 //
 // Params:
-//   - repo *repository.AuthRepository
+//   - user model.userModel
 //
 // Return:
 //   - error
