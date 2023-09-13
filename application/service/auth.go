@@ -36,6 +36,7 @@ func NewAuthService(repo *repository.AuthRepository) *AuthService {
 //   - *string
 //   - error
 func (as *AuthService) Login(creds model.LoginRequest) (*string, error) {
+	// get user data
 	user, err := as.repo.Login(creds)
 	if err != nil {
 		return nil, err
