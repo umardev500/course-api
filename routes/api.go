@@ -15,12 +15,14 @@ type API struct {
 	DB *mongo.Database
 }
 
+// LoadAPIRoutes load all api routes
 func (api *API) LoadAPIRoutes(app *fiber.App) {
 	router := app.Group("/api")
 	router.Use(middleware.NewLogger())
 	router.Route("/auth", api.loadAuthRoutes)
 }
 
+// loadAuthRoutes load all routes of auth
 func (api *API) loadAuthRoutes(router fiber.Router) {
 	collection := api.DB.Collection("users")
 	authRepo := repository.NewAuthRepository(collection)
