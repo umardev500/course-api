@@ -2,22 +2,30 @@ package routes
 
 import (
 	"course-api/application/controller"
+	"course-api/application/repository"
+	"course-api/application/service"
 	"course-api/config"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
-func LoadAPIRoutes(app *fiber.App) {
-	router := app.Group("/api")
-	router.Use(logger.New(config.LoggerConf))
-	router.Route("/auth", loadAuthRoutes)
+type API struct {
+	DB *mongo.Database
 }
 
-func loadAuthRoutes(router fiber.Router) {
-	handler := &controller.Auth{
-		Validate: config.Validate,
-	}
+func (api *API) LoadAPIRoutes(app *fiber.App) {
+	router := app.Group("/api")
+	router.Use(logger.New(config.LoggerConf))
+	router.Route("/auth", api.loadAuthRoutes)
+}
+
+func (api *API) loadAuthRoutes(router fiber.Router) {
+	collection := api.DB.Collection("users")
+	authRepo := repository.NewAuthRepository(collection)
+	authService := service.NewAuthService(authRepo)
+	handler := controller.NewAuthController(config.Validate, authService)
 
 	router.Post("/login", handler.Login)
 	router.Post("/register", handler.Register)
