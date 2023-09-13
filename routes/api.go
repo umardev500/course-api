@@ -5,9 +5,9 @@ import (
 	"course-api/application/repository"
 	"course-api/application/service"
 	"course-api/config"
+	"course-api/middleware"
 
 	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/logger"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -17,7 +17,7 @@ type API struct {
 
 func (api *API) LoadAPIRoutes(app *fiber.App) {
 	router := app.Group("/api")
-	router.Use(logger.New(config.LoggerConf))
+	router.Use(middleware.NewLogger())
 	router.Route("/auth", api.loadAuthRoutes)
 }
 
