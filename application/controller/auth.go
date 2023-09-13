@@ -69,7 +69,7 @@ func (a *Auth) Register(c *fiber.Ctx) error {
 		return failed(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return ok(c, fiber.StatusOK, "Register successfuly", nil)
+	return ok(c, fiber.StatusOK, "register successfuly", nil)
 }
 
 func (a *Auth) Logout(c *fiber.Ctx) error {
