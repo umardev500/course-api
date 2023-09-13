@@ -21,6 +21,7 @@ func (api *API) LoadAPIRoutes(app *fiber.App) {
 	router.Use(middleware.NewLogger())
 	router.Route("/auth", api.loadAuthRoutes)
 	router.Route("/video", api.loadVideoRoutes)
+	router.Route("/upload", api.loadUploadRoutes)
 }
 
 // loadAuthRoutes load all routes of auth
@@ -33,6 +34,19 @@ func (api *API) loadAuthRoutes(router fiber.Router) {
 	router.Post("/login", middleware.NewLimiter(), handler.Login)
 	router.Post("/register", handler.Register)
 	router.Post("/logout", handler.Logout)
+}
+
+// loadUploadRoutes - load all routes of upload
+//
+// Params:
+//   - router fiber.Router
+//
+// Return:
+//   - void
+func (api *API) loadUploadRoutes(router fiber.Router) {
+	uploadService := service.NewUploadService()
+	handler := controller.NewUploadController(uploadService)
+	router.Post("/chunk/:file_id/:total/:index", handler.UploadChunk)
 }
 
 // loadVideoRoutes - load all routes of video handler
