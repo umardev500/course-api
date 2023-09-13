@@ -55,7 +55,21 @@ func (a *Auth) Login(c *fiber.Ctx) error {
 // Return:
 //   - error
 func (a *Auth) Register(c *fiber.Ctx) error {
-	return nil
+	var user *model.UserModel = new(model.UserModel)
+	if err := c.BodyParser(user); err != nil {
+		return failed(c, fiber.StatusBadRequest, err.Error())
+	}
+
+	// validate
+	if err := a.validate.Struct(user); err != nil {
+		return failed(c, fiber.StatusUnprocessableEntity, err.Error())
+	}
+
+	if err := a.service.Register(*user); err != nil {
+		return failed(c, fiber.StatusInternalServerError, err.Error())
+	}
+
+	return ok(c, fiber.StatusOK, "Register successfuly", nil)
 }
 
 func (a *Auth) Logout(c *fiber.Ctx) error {

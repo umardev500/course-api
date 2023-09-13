@@ -33,3 +33,14 @@ func (ar *AuthRepository) Login(creds model.LoginRequest) (*model.UserModel, err
 
 	return user, nil
 }
+
+// Create - insert user register
+//
+// Return:
+//   - error
+func (ar *AuthRepository) Create(payload model.UserModel) error {
+	ctx, cancel := context.WithTimeout(context.TODO(), 10*time.Second)
+	defer cancel()
+	_, err := ar.collection.InsertOne(ctx, payload)
+	return err
+}

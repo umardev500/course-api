@@ -63,3 +63,23 @@ func (as *AuthService) Login(creds model.LoginRequest) (*string, error) {
 
 	return &t, nil
 }
+
+// Register create new user
+//
+// Params:
+//   - repo *repository.AuthRepository
+//
+// Return:
+//   - error
+func (as *AuthService) Register(user model.UserModel) error {
+	// hashing password
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(user.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	user.Password = string(hashedPassword)
+	now := time.Now().Unix()
+	user.Modify.CreatedAt = now
+
+	return as.repo.Create(user)
+}
