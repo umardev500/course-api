@@ -1,8 +1,8 @@
 package model
 
 type LoginRequest struct {
-	User string `json:"user"`
-	Pass string `json:"pass"`
+	User string `json:"user" validate:"min=6"`
+	Pass string `json:"pass" validate:"min=8"`
 }
 
 type LoginResponse struct {

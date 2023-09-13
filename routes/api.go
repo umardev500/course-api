@@ -15,7 +15,9 @@ func LoadAPIRoutes(app *fiber.App) {
 }
 
 func loadAuthRoutes(router fiber.Router) {
-	handler := &controller.Auth{}
+	handler := &controller.Auth{
+		Validate: config.Validate,
+	}
 
 	router.Post("/login", handler.Login)
 	router.Post("/register", handler.Register)
