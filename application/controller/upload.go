@@ -2,6 +2,9 @@ package controller
 
 import (
 	"course-api/application/service"
+	"course-api/domain/model"
+	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -37,7 +40,19 @@ func (uc *UploadController) UploadChunk(c *fiber.Ctx) error {
 	dirID := c.Params("file_id")
 	chunkIndex, _ := strconv.Atoi(c.Params("index"))
 	chunkTotal, _ := strconv.Atoi(c.Params("total"))
-	uc.service.UploadChunk(formFile, dirID, chunkTotal, chunkIndex)
+	finish, fileLocation, err := uc.service.UploadChunk(formFile, dirID, chunkTotal, chunkIndex)
+	if err != nil {
+		return failed(c, fiber.StatusInternalServerError, err.Error())
+	}
+	if !finish {
+		return ok(c, fiber.StatusOK, "chunk uploaded", nil)
+	}
 
-	return nil
+	host := os.Getenv("HOST")
+	port := os.Getenv("PORT")
+
+	fileURL := fmt.Sprintf("%s%s/%s", host, port, *fileLocation)
+	return ok(c, fiber.StatusOK, "file upload finished", model.UploadResponse{
+		FileURL: fileURL,
+	})
 }
